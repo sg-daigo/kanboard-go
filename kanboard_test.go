@@ -155,3 +155,37 @@ func TestUser(t *testing.T) {
 		t.Errorf("Expected Name, got %s", res.Username)
 	}
 }
+
+func TestColumns(t *testing.T) {
+	// 期待するレスポンスを定義
+	mockResponse := `{
+		"jsonrpc": "2.0",
+		"id": "test-id",
+		"result": [
+			{"id":"1","title":"Backlog","position":"1","project_id":"1","task_limit":"0","description":"","hide_in_dashboard":"0"},
+			{"id":"2","title":"Ready","position":"2","project_id":"1","task_limit":"0","description":"","hide_in_dashboard":"0"},
+			{"id":"3","title":"Work in progress","position":"3","project_id":"1","task_limit":"0","description":"","hide_in_dashboard":"0"},
+			{"id":"4","title":"Done","position":"4","project_id":"1","task_limit":"0","description":"","hide_in_dashboard":"0"}
+		]
+	}`
+
+	// テスト用サーバーの起動
+	conf := NewTestServer(t, mockResponse)
+
+	// 実行
+	request := NewColumnsRequest(1)
+	request.ID = "test-id"
+
+	res, err := SendRequest[ColumnsParams, []ColumnsResult](request, conf, logger)
+	if err != nil {
+		t.Fatalf("Failed: %v", err)
+	}
+
+	// 検証
+	if len(res) != 4 {
+		t.Errorf("Expected length 4, got %d", len(res))
+	}
+	if res[0].Title != "Backlog" {
+		t.Errorf("Expected Name, got %s", res[0].Title)
+	}
+}

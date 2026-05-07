@@ -52,6 +52,13 @@ func NewUserRequest(userID int) Request[UserParams] {
 	return NewRequest[UserParams]("getUser", &params)
 }
 
+func NewColumnsRequest(projectID int) Request[ColumnsParams] {
+	params := ColumnsParams{
+		ProjectID: projectID,
+	}
+	return NewRequest("getColumns", &params)
+}
+
 var httpClient = &http.Client{
 	Timeout: time.Second * 10, // タイムアウト10秒
 }

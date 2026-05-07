@@ -30,6 +30,8 @@ func (f *FlexibleInt) UnmarshalJSON(b []byte) error {
 	return fmt.Errorf("invalid int value: %s", string(b))
 }
 
+// ----- リクエスト -----
+
 // Request Kanboard API リクエスト
 type Request[T any] struct {
 	JSONRPC string `json:"jsonrpc"`
@@ -47,6 +49,13 @@ type TaskTagsParams struct {
 type UserParams struct {
 	UserID int `json:"user_id"`
 }
+
+// ColumnsParams getColumnsリクエストのパラメータ
+type ColumnsParams struct {
+	ProjectID int `json:"project_id"`
+}
+
+// ----- レスポンス -----
 
 // Response Kanboard API レスポンス
 type Response struct {
@@ -112,4 +121,14 @@ type UserResult struct {
 	APIAccessToken       string      `json:"api_access_token"`
 	Filter               string      `json:"filter"`
 	Theme                string      `json:"theme"`
+}
+
+type ColumnsResult struct {
+	ID              FlexibleInt `json:"id"`
+	Title           string      `json:"title"`
+	Position        string      `json:"position"`
+	ProjectID       FlexibleInt `json:"project_id"`
+	TaskLimit       FlexibleInt `json:"task_limit"`
+	Description     string      `json:"description"`
+	HideInDashboard string      `json:"hide_in_dashboard"`
 }
